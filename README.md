@@ -40,7 +40,7 @@ source create_venv.sh
 ## Kullanım
 Script'i komut satırından şu şekilde çalıştırabilirsiniz:
 ```bash
-python karekod_olustur.py <data> -o <output_file> -t <title> -i <image1> <image2> ...
+python3 main.py <data> -o <output_file> -t <title> -i <image1> <image2> ...
 ```
 ## Parametreler
 Parametreler:
@@ -52,7 +52,7 @@ Parametreler:
 * **-f, --format:** Çıktı dosyası formatı (varsayılan: "png").
 ## Örnek Kullanım:
 ```bash
-python karekod_olustur.py "https://google.com" -t "Başlık" -i logo1.png logo2.svg logo3.jpg
+python3 main.py "https://example.com" -o output -t "Örnek QR Kodu" -i logo1.png logo2.svg -r 2000 -f jpg
 ```
 Bu komut, verilen URL'yi içeren bir QR kodu oluşturacak, belirtilen başlığı ekleyecek ve üç logoyu QR kodunun üstüne yerleştirecektir.
 ## Çıktı
