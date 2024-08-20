@@ -104,10 +104,11 @@ def save_qr_image(background, output_file, version, output_format):
         print(f"Hata: {e}")
         print(f"QR kod versiyonu {version} kaydedilemedi. Lütfen geçerli bir format belirtin.")
 
-def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=None, output_format="png", text_scale_factor=1.0, logo_scale_factor=1.0):
+def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=None, output_format="png",
+                    text_scale_factor=1.0, logo_scale_factor=1.0, min_version=1, max_version=20):
 
     try:
-        for version in range(1, 41):
+        for version in range(min_version, max_version + 1):
             qr_img = create_qr_code(data, version, resolution)
             logos = load_logos(image_files, int(50 * logo_scale_factor))
             
@@ -151,8 +152,11 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--format", help="Çıktı dosyası formatı (png, jpg, bmp, vb.)", default="png")
     parser.add_argument("-ts", "--text_scale_factor", type=float, help="Yazının boyutu (tavsiye edilen 1)", default=1.0)
     parser.add_argument("-ls", "--logo_scale_factor", type=float, help="Logoların boyutu (tavsiye edilen 1)", default=1.0)
+    parser.add_argument("-mv", "--min_version", type=int, help="Minimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
+    parser.add_argument("-xv", "--max_version", type=int, help="Maksimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
     args = parser.parse_args()
+    if args.min_version > args.max_version:
+        parser.error("Minimum versiyon, maksimum versiyondan büyük olamaz.")
 
-    create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format, args.text_scale_factor, args.logo_scale_factor)
-
+    create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format, args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version)
 

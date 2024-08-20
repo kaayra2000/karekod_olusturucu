@@ -52,6 +52,8 @@ Parametreler:
 * **-f, --format:** Çıktı dosyası formatı (varsayılan: "png").
 * **-ts, --text_scale_factor:** Başlık boyutu. (varsayılan: 1)
 * **-ls, --logo_scale_factor:** Logoların boyutu. (varsayılan: 1)
+* **-mv, --min_version:** Oluşturulacak versiyon numaralarının en küçüğü. (varsayılan 1, maksimumdan büyük olamaz)
+* **-xv, --max_version:** Oluşturulacak versiyon numaralarının en büyüğü. (varsayılan 1, minimumdan küçük olamaz)
 ## Örnek Kullanım:
 ```bash
 python3 main.py "https://example.com" -o output -t "Örnek QR Kodu" -i logo1.png logo2.svg -r 2000 -f jpg -ls 1.2 -ts 1.3
