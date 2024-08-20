@@ -44,10 +44,11 @@ python karekod_olustur.py <data> -o <output_file> -t <title> -i <image1> <image2
 ```
 ## Parametreler
 Parametreler:
-* **<data>:** QR kodunda yer alacak veri (zorunlu).
+* **<data\>:** QR kodunda yer alacak veri (zorunlu).
 * **-o, --output:** Çıktı dosyasının adı (varsayılan: "karekod.png").
 * **-t, --title:** QR kodun üstüne eklenecek başlık (varsayılan: "WhatsApp QR Kodu").
 * **-i, --images:** Eklenecek resim dosyalarının yolları (isteğe bağlı, birden fazla olabilir).
+* **-r, --resolution:** Çıktının yatay piksel sayısı. (varsayılan: 1080)
 ## Örnek Kullanım:
 ```bash
 python karekod_olustur.py "https://google.com" -t "Başlık" -i logo1.png logo2.svg logo3.jpg
@@ -63,7 +64,6 @@ Script, belirtilen isimde bir klasör oluşturur ve tüm QR kod versiyonlarını
 ## Özelleştirme
 Kod içerisinde bazı parametreleri değiştirerek çıktıyı özelleştirebilirsiniz:
 
-* **scale_factor:** QR kodunun boyutunu ayarlar (varsayılan: 1080px genişlik).
 * **margin:** Başlık metninin kenar boşluklarını ayarlar.
 * **logo_max_size:** Logoların maksimum boyutunu belirler.
 

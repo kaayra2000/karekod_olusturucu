@@ -8,7 +8,7 @@ import textwrap
 import io
 import cairosvg
 
-def create_whatsapp_qr(data, output_file, title, image_files=None):
+def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=None):
     output_dir = os.path.splitext(output_file)[0]
     os.makedirs(output_dir, exist_ok=True)
 
@@ -21,8 +21,8 @@ def create_whatsapp_qr(data, output_file, title, image_files=None):
                             image_factory=StyledPilImage, 
                             module_drawer=RoundedModuleDrawer())
 
-        scale_factor = 1080 / img.size[0]
-        new_size = (1080, int(img.size[1] * scale_factor))
+        scale_factor = resolution / img.size[0]
+        new_size = (resolution, int(img.size[1] * scale_factor))
         img = img.resize(new_size, Image.LANCZOS)
 
         img_w, img_h = img.size
@@ -106,6 +106,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", help="Çıktı dosyasının adı (örn: qrcode.png)", default="karekod.png")
     parser.add_argument("-t", "--title", help="QR kodun üstüne eklenecek başlık", default="WhatsApp QR Kodu")
     parser.add_argument("-i", "--images", nargs='+', help="Eklenecek resim dosyalarının yolları", default=None)
+    parser.add_argument("-r", "--resolution", type=int, help="QR kodun çözünürlüğü (piksel cinsinden genişlik)", default=1080)
     args = parser.parse_args()
 
-    create_whatsapp_qr(args.data, args.output, args.title, args.images)
+    create_whatsapp_qr(args.data, args.output, args.title, args.resolution ,args.images)
