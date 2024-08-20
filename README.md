@@ -12,7 +12,7 @@ Bu Python scripti, özelleştirilmiş QR kodları oluşturmak için tasarlanmı�
 
 ## Gereksinimler
 
-Bu script'i çalıştırmak için aşağıdaki Python kütüphanelerinin yüklü olması gerekmektedir:
+Bu script'i çalıştırmak için Python3 ve aşağıdaki Python kütüphanelerinin yüklü olması gerekmektedir:
 
 - `qrcode`
 - `Pillow (PIL)`
@@ -21,8 +21,22 @@ Bu script'i çalıştırmak için aşağıdaki Python kütüphanelerinin yüklü
 Gereken kütüphaneleri yüklemek için aşağıdaki komutu kullanabilirsiniz:
 
 ```bash
-pip install qrcode[pil] Pillow cairosvg
+pip3 install qrcode[pil] Pillow cairosvg
 ```
+
+## Linux'ta Kurulum
+
+Linux sistemlerde kurulum yapmak için aşağıdaki adımları izleyin:
+1. Terminal'i açın.
+1. Aşağıdaki komutu çalıştırın
+```bash
+source create_venv.sh
+```
+1. Bu işlemden sonra *qr_code_env* adında bir klasör oluşacaktır.
+1. Sonrasında **Kulanım** başlığına geçebilirsiniz.
+1. Kullanımınız bittikten sonra isterseniz `deactivate` komutuyla sanal ortamı kapatabilirsiniz.
+
+
 ## Kullanım
 Script'i komut satırından şu şekilde çalıştırabilirsiniz:
 ```bash
