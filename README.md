@@ -7,7 +7,7 @@ Bu Python scripti, özelleştirilmiş QR kodları oluşturmak için tasarlanmı�
 - Tüm QR kod versiyonlarını (1-40) oluşturur.
 - Özelleştirilebilir başlık ekler.
 - Birden fazla logo ekleyebilme özelliği.
-- Yüksek çözünürlüklü çıktı (1080px genişlik).
+- Ayarlanabilir çözünürlüklü çıktı (varsayılan 1080px genişlik).
 - SVG dahil çeşitli resim formatlarını destekler.
 
 ## Gereksinimler
