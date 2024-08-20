@@ -8,7 +8,7 @@ import textwrap
 import io
 import cairosvg
 
-def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=None):
+def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=None, output_format="png"):
     output_dir = os.path.splitext(output_file)[0]
     os.makedirs(output_dir, exist_ok=True)
 
@@ -94,11 +94,16 @@ def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=No
             draw.text(((bg_w - line_width) // 2, y_text), line, font=font, fill="black")
             y_text += line_height
 
-        versioned_filename = f"{os.path.splitext(os.path.basename(output_file))[0]}_v{version}.png"
+        versioned_filename = f"{os.path.splitext(os.path.basename(output_file))[0]}_v{version}.{output_format}"
         versioned_output = os.path.join(output_dir, versioned_filename)
 
-        background.save(versioned_output)
-        print(f"QR kod versiyonu {version} başarıyla oluşturuldu ve {versioned_output} olarak kaydedildi.")
+        try:
+            background.save(versioned_output)
+            print(f"QR kod versiyonu {version} başarıyla oluşturuldu ve {versioned_output} olarak kaydedildi.")
+        except ValueError as e:
+            print(f"Hata: {e}")
+            print(f"QR kod versiyonu {version} kaydedilemedi. Lütfen geçerli bir format belirtin.")
+            break
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="WhatsApp tarzı QR kod oluşturucu")
@@ -107,6 +112,7 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--title", help="QR kodun üstüne eklenecek başlık", default="WhatsApp QR Kodu")
     parser.add_argument("-i", "--images", nargs='+', help="Eklenecek resim dosyalarının yolları", default=None)
     parser.add_argument("-r", "--resolution", type=int, help="QR kodun çözünürlüğü (piksel cinsinden genişlik)", default=1080)
+    parser.add_argument("-f", "--format", help="Çıktı dosyası formatı (png, jpg, bmp, vb.)", default="png")
     args = parser.parse_args()
 
-    create_whatsapp_qr(args.data, args.output, args.title, args.resolution ,args.images)
+    create_whatsapp_qr(args.data, args.output, args.title, args.resolution ,args.images, args.format)

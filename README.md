@@ -49,6 +49,7 @@ Parametreler:
 * **-t, --title:** QR kodun üstüne eklenecek başlık (varsayılan: "WhatsApp QR Kodu").
 * **-i, --images:** Eklenecek resim dosyalarının yolları (isteğe bağlı, birden fazla olabilir).
 * **-r, --resolution:** Çıktının yatay piksel sayısı. (varsayılan: 1080)
+* **-f, --format:** Çıktı dosyası formatı (varsayılan: "png").
 ## Örnek Kullanım:
 ```bash
 python karekod_olustur.py "https://google.com" -t "Başlık" -i logo1.png logo2.svg logo3.jpg
