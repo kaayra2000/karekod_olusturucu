@@ -46,8 +46,9 @@ python3 main.py <data> -o <output_file> -t <title> -i <image1> <image2> ...
 Parametreler:
 * **<data\>:** QR kodunda yer alacak veri (zorunlu).
 * **-o, --output:** Çıktı dosyasının adı (varsayılan: "karekod.png").
+* **-cl, --center_logo:** QR kodunun merkezinde gözükecek logo. (varsayılan: None, svg de olabilir)
 * **-t, --title:** QR kodun üstüne eklenecek başlık (varsayılan: "WhatsApp QR Kodu").
-* **-i, --images:** Eklenecek resim dosyalarının yolları (isteğe bağlı, birden fazla olabilir).
+* **-i, --images:** Üst kısma eklenecek resim dosyalarının yolları (isteğe bağlı, birden fazla olabilir, svg de olabilir).
 * **-r, --resolution:** Çıktının yatay piksel sayısı. (varsayılan: 1080)
 * **-f, --format:** Çıktı dosyası formatı (varsayılan: "png").
 * **-ts, --text_scale_factor:** Başlık boyutu. (varsayılan: 1)
@@ -56,7 +57,7 @@ Parametreler:
 * **-xv, --max_version:** Oluşturulacak versiyon numaralarının en büyüğü. (varsayılan 1, minimumdan küçük olamaz)
 ## Örnek Kullanım:
 ```bash
-python3 main.py "https://example.com" -o output -t "Örnek QR Kodu" -i logo1.png logo2.svg -r 2000 -f jpg -ls 1.2 -ts 1.3
+python3 main.py "https://example.com" -o output -t "Örnek QR Kodu" -i logo1.png logo2.svg -cl center_logo.png -r 2000 -f jpg -ls 1.2 -ts 1.3 -mv 4 -xv 12
 ```
 Bu komut, verilen URL'yi içeren bir QR kodu oluşturacak, belirtilen başlığı ekleyecek ve üç logoyu QR kodunun üstüne yerleştirecektir.
 ## Çıktı

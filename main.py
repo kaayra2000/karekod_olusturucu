@@ -8,7 +8,12 @@ import textwrap
 import io
 import cairosvg
 
-def create_qr_code(data, version, resolution):
+
+def svg_to_png(svg_file):
+    png_data = cairosvg.svg2png(url=svg_file)
+    return Image.open(io.BytesIO(png_data))
+
+def create_qr_code(data, version, resolution, center_logo=None):
     qr = qrcode.QRCode(version=version, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
@@ -17,9 +22,24 @@ def create_qr_code(data, version, resolution):
                         image_factory=StyledPilImage, 
                         module_drawer=RoundedModuleDrawer())
 
+    if center_logo:
+        logo = svg_to_png(center_logo) if center_logo.lower().endswith('.svg') else Image.open(center_logo)
+        # Resize logo to be about 1/4 the size of the QR code
+        logo_size = img.size[0] // 4
+        logo = logo.resize((logo_size, logo_size), Image.LANCZOS)
+        
+        # Calculate position to place logo in center
+        pos = ((img.size[0] - logo.size[0]) // 2, (img.size[1] - logo.size[1]) // 2)
+        
+        # Create a white background for the logo
+        white_box = Image.new('RGBA', logo.size, 'white')
+        img.paste(white_box, pos)
+        img.paste(logo, pos, logo if logo.mode == 'RGBA' else None)
+
     scale_factor = resolution / img.size[0]
     new_size = (resolution, int(img.size[1] * scale_factor))
     return img.resize(new_size, Image.LANCZOS)
+
 
 def load_font(font_size, scale_factor):
     try:
@@ -105,11 +125,11 @@ def save_qr_image(background, output_file, version, output_format):
         print(f"QR kod versiyonu {version} kaydedilemedi. Lütfen geçerli bir format belirtin.")
 
 def create_whatsapp_qr(data, output_file, title, resolution=1080, image_files=None, output_format="png",
-                    text_scale_factor=1.0, logo_scale_factor=1.0, min_version=1, max_version=20):
+                    text_scale_factor=1.0, logo_scale_factor=1.0, min_version=1, max_version=20, center_logo=None):
 
     try:
         for version in range(min_version, max_version + 1):
-            qr_img = create_qr_code(data, version, resolution)
+            qr_img = create_qr_code(data, version, resolution, center_logo)
             logos = load_logos(image_files, int(50 * logo_scale_factor))
             
             background, wrapped_text, title_height, logo_max_size, spacing, font = create_background(qr_img, title, text_scale_factor)
@@ -154,9 +174,12 @@ if __name__ == "__main__":
     parser.add_argument("-ls", "--logo_scale_factor", type=float, help="Logoların boyutu (tavsiye edilen 1)", default=1.0)
     parser.add_argument("-mv", "--min_version", type=int, help="Minimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
     parser.add_argument("-xv", "--max_version", type=int, help="Maksimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
+    parser.add_argument("-cl", "--center_logo", help="Path to the logo image to be placed in the center of the QR code", default=None)
+
     args = parser.parse_args()
     if args.min_version > args.max_version:
         parser.error("Minimum versiyon, maksimum versiyondan büyük olamaz.")
 
-    create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format, args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version)
+    create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format,
+                        args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version, args.center_logo)
 
