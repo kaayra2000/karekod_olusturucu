@@ -1,7 +1,7 @@
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageFont
 from .text_helper import wrap_text
 from .image_helper import load_logos, load_font, add_logo_to_qr, resize_qr_image, create_background, paste_logos, draw_title
 from .filesystem_helper import save_qr_image
