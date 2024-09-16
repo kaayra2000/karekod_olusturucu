@@ -75,7 +75,7 @@ def resize_qr_image(qr_image: Image.Image, resolution: int) -> Image.Image:
 
 def add_logo_to_qr(qr_image: Image.Image, logo_path: str) -> Image.Image:
     """
-    QR kod görüntüsünün merkezine logo ekler.
+    QR kod görüntüsünün merkezine logo ekler, logo oranlarını koruyarak.
 
     Args:
         qr_image (Image.Image): Orijinal QR kod görüntüsü.
@@ -87,12 +87,15 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str) -> Image.Image:
     # Logo dosyasını aç ve işle
     logo = process_logo(logo_path)
     
-    # Logo boyutunu QR kodunun yaklaşık 1/4'ü olacak şekilde yeniden boyutlandır
-    logo_size = qr_image.size[0] // 4
-    logo = logo.resize((logo_size, logo_size), Image.LANCZOS)
+    # QR kodunun boyutunun %25'ini hesapla
+    qr_width, qr_height = qr_image.size
+    max_size = min(qr_width, qr_height) // 4
+    
+    # Logo boyutunu oranları koruyarak yeniden boyutlandır
+    logo.thumbnail((max_size, max_size), Image.LANCZOS)
     
     # Logoyu merkeze yerleştirmek için pozisyonu hesapla
-    pos = ((qr_image.size[0] - logo.size[0]) // 2, (qr_image.size[1] - logo.size[1]) // 2)
+    pos = ((qr_width - logo.width) // 2, (qr_height - logo.height) // 2)
     
     # Logo için beyaz bir arka plan oluştur ve logoyu yerleştir
     white_box = Image.new('RGBA', logo.size, 'white')
