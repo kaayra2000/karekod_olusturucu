@@ -8,7 +8,8 @@ from .filesystem_helper import save_qr_image
 from typing import Tuple, List
 from .math_helper import calculate_text_height
 
-def create_qr_code(data: str, version: int, resolution: int, center_logo: str = None) -> Image.Image:
+def create_qr_code(data: str, version: int, resolution: int, center_logo: str = None, 
+                   is_logo_circle: bool = True, border_size: int = 0, border_color: str = "white") -> Image.Image:
     """
     Özelleştirilmiş bir QR kodu oluşturur.
 
@@ -17,6 +18,9 @@ def create_qr_code(data: str, version: int, resolution: int, center_logo: str = 
         version (int): QR kodunun sürümü (1-40 arası).
         resolution (int): Oluşturulacak QR kodunun çözünürlüğü.
         center_logo (str, optional): Merkeze eklenecek logo dosyasının yolu.
+        is_logo_circle (bool): Merkez logonun daire şeklinde olup olmayacağı.
+        border_size (int): QR kodunun etrafındaki boş alanın genişliği.
+        border_color (str): QR kodunun kenarlık rengi.
 
     Returns:
         Image.Image: Oluşturulan QR kod görüntüsü.
@@ -24,7 +28,7 @@ def create_qr_code(data: str, version: int, resolution: int, center_logo: str = 
     qr_image = generate_qr_image(data, version)
     
     if center_logo:
-        qr_image = add_logo_to_qr(qr_image, center_logo)
+        qr_image = add_logo_to_qr(qr_image, center_logo, is_logo_circle, border_size, border_color)
     
     return resize_qr_image(qr_image, resolution)
 
@@ -70,7 +74,8 @@ def prepare_title_text(title: str, max_width: int, max_height: int, scale_factor
 def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int = 1080, 
                        image_files: list = None, output_format: str = "png",
                        text_scale_factor: float = 1.0, logo_scale_factor: float = 1.0, 
-                       min_version: int = 1, max_version: int = 20, center_logo: str = None) -> None:
+                       min_version: int = 1, max_version: int = 20, center_logo: str = None,
+                       is_logo_circle: bool = True,  border_size: int = 0, border_color: str = "white") -> None:
     """
     WhatsApp QR kodu oluşturur ve kaydeder.
 
@@ -86,6 +91,9 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int 
         min_version (int): Minimum QR kod versiyonu.
         max_version (int): Maksimum QR kod versiyonu.
         center_logo (str): Merkeze yerleştirilecek logo dosyasının yolu.
+        is_logo_circle (bool): Merkez logonun daire şeklinde olup olmayacağı.
+        border_size (int): QR kodunun etrafındaki boş alanın genişliği.
+        border_color (str): QR kodunun kenarlık rengi.
 
     Returns:
         None: Fonksiyon bir değer döndürmez, ancak bir QR kodu dosyası oluşturur.
@@ -93,7 +101,7 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int 
     try:
         for version in range(min_version, max_version + 1):
             # QR kodunu oluştur
-            qr_img = create_qr_code(data, version, resolution, center_logo)
+            qr_img = create_qr_code(data, version, resolution, center_logo, is_logo_circle, border_size, border_color)
             
             # Logoları yükle
             logos = load_logos(image_files, int(50 * logo_scale_factor))

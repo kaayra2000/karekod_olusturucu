@@ -18,15 +18,23 @@ def main() -> None:
     parser.add_argument("-ts", "--text_scale_factor", type=float, help="Yazının boyutu (tavsiye edilen 1)", default=1.0)
     parser.add_argument("-ls", "--logo_scale_factor", type=float, help="Logoların boyutu (tavsiye edilen 1)", default=1.0)
     parser.add_argument("-mv", "--min_version", type=int, help="Minimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
-    parser.add_argument("-xv", "--max_version", type=int, help="Maksimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
+    parser.add_argument("-xv", "--max_version", type=int, help="Maksimum QR kod versiyonu (1-40 arası)", default=20, choices=range(1, 41))
     parser.add_argument("-cl", "--center_logo", help="QR kodun merkezine yerleştirilecek logo dosyasının yolu", default=None)
+    parser.add_argument("-ilc", "--is_logo_circle", action="store_true", help="Merkez logonun daire şeklinde olup olmayacağı")
+    parser.add_argument("-bs", "--border_size", type=float, help="Merkez logonun kenarlık boyutu", default=0)
+    parser.add_argument("-bc", "--border_color", help="Merkez logonun kenarlık rengi", default="white")
 
     args = parser.parse_args()
+
     if args.min_version > args.max_version:
         parser.error("Minimum versiyon, maksimum versiyondan büyük olamaz.")
+    
+    if args.border_size < 0:
+        parser.error("Kenarlık boyutu negatif olamaz.")
 
     create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format,
-                       args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version, args.center_logo)
+                       args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version,
+                       args.center_logo, args.is_logo_circle, args.border_size, args.border_color)
 
 if __name__ == "__main__":
     main()

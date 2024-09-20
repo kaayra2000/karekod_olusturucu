@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debug",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "args": [
+                "https://github.com/baselkelziye/YTU_Bilgisayar_Muhendisligi_Arsiv",
+                "-t",
+                "YTÜ Bilgisayar Mühendisliği Ders Notları",
+                "-i",
+                "logo_traktor.svg",
+                "logo_ugithub.svg",
+                "-r",
+                "1000",
+                "-f",
+                "jpg",
+                "-ts",
+                "1",
+                "-ls",
+                "1",
+                "-mv",
+                "1",
+                "-xv",
+                "12",
+                "-cl",
+                "logo_yildiz.svg"
+            ]
+        }
+    ]
+}

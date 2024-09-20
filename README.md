@@ -55,6 +55,9 @@ Parametreler:
 * **-ls, --logo_scale_factor:** Logoların boyutu. (varsayılan: 1)
 * **-mv, --min_version:** Oluşturulacak versiyon numaralarının en küçüğü. (varsayılan 1, maksimumdan büyük olamaz)
 * **-xv, --max_version:** Oluşturulacak versiyon numaralarının en büyüğü. (varsayılan 1, minimumdan küçük olamaz)
+* **-ilc, --is_logo_circle** Merkezdeki logonun dairesel mi yoksa kare mi olacağını belirler.
+* **-bs, --border_size** Merkezdeki logonun etrafındaki boş alanın (quiet zone) genişliğini ayarlar.
+* **-bc, --border_color** Merkezdeki logonun kenarlık rengini belirler.
 ## Örnek Kullanım:
 ```bash
 python3 main.py "https://example.com" -o output -t "Örnek QR Kodu" -i logo1.png logo2.svg -cl center_logo.png -r 2000 -f jpg -ls 1.2 -ts 1.3 -mv 4 -xv 12

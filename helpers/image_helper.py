@@ -1,9 +1,9 @@
 import io
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image, ImageFont, ImageDraw, ImageChops, ImageOps
 import cairosvg
 from typing import List, Tuple
 from .math_helper import calculate_dimensions
-
+import numpy as np
 def load_logos(image_files: list, logo_max_size: int) -> list:
     """
     Verilen dosya yollarından logo görüntülerini yükler ve boyutlandırır.
@@ -73,36 +73,93 @@ def resize_qr_image(qr_image: Image.Image, resolution: int) -> Image.Image:
     return qr_image.resize(new_size, Image.LANCZOS)
 
 
-def add_logo_to_qr(qr_image: Image.Image, logo_path: str) -> Image.Image:
+def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True,
+                    border_size: int = 0, border_color: str = "white") -> Image.Image:
     """
-    QR kod görüntüsünün merkezine logo ekler, logo oranlarını koruyarak.
+    QR kod görüntüsünün merkezine logo ekler. Logo daire veya kare olarak eklenebilir.
 
     Args:
         qr_image (Image.Image): Orijinal QR kod görüntüsü.
         logo_path (str): Eklenecek logo dosyasının yolu.
+        is_circle (bool): Logo daire mi olsun, kare mi. Varsayılan True (daire).
+        border_size (int): Logo etrafındaki kenarlık boyutu.
+        border_color (str): Logo etrafındaki kenarlık rengi.
 
     Returns:
         Image.Image: Logo eklenmiş QR kod görüntüsü.
     """
+
     # Logo dosyasını aç ve işle
     logo = process_logo(logo_path)
-    
+
+    # Logo etrafındaki beyazlıkları hafifçe kırp
+    logo = trim_logo(logo, border_size, border_color)
+
     # QR kodunun boyutunun %25'ini hesapla
     qr_width, qr_height = qr_image.size
-    max_size = min(qr_width, qr_height) // 4
-    
+    max_logo_size = min(qr_width, qr_height) // 4
+
     # Logo boyutunu oranları koruyarak yeniden boyutlandır
-    logo.thumbnail((max_size, max_size), Image.LANCZOS)
-    
+    logo.thumbnail((max_logo_size, max_logo_size), Image.LANCZOS)
+
+    # Beyaz arka planlı yeni bir resim oluştur
+    border_size = int(logo.width * 0.10)  # Kenar boşluğu (%10 oranında)
+    new_size = (logo.width + 2 * border_size, logo.height + 2 * border_size)
+    background = Image.new('RGBA', new_size, 'white')
+
+    # Logoyu yeni arka planın ortasına yerleştir
+    logo_position = (border_size, border_size)
+    background.paste(logo, logo_position, mask=logo if logo.mode == 'RGBA' else None)
+
+    if is_circle:
+        # Dairesel maske oluştur
+        mask = Image.new('L', new_size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0) + new_size, fill=255)
+        # Maskeyi arka plana uygula
+        background.putalpha(mask)
+
     # Logoyu merkeze yerleştirmek için pozisyonu hesapla
-    pos = ((qr_width - logo.width) // 2, (qr_height - logo.height) // 2)
-    
-    # Logo için beyaz bir arka plan oluştur ve logoyu yerleştir
-    white_box = Image.new('RGBA', logo.size, 'white')
-    qr_image.paste(white_box, pos)
-    qr_image.paste(logo, pos, logo if logo.mode == 'RGBA' else None)
-    
+    pos = ((qr_width - new_size[0]) // 2, (qr_height - new_size[1]) // 2)
+
+    # Logoyu QR koda ekle
+    qr_image.paste(background, pos, mask=background if background.mode == 'RGBA' else None)
+
     return qr_image
+
+
+
+def trim_logo(logo: Image.Image, border_size: int = 0, border_color: str = "white") -> Image.Image:
+    """
+    Logo etrafındaki gereksiz boşlukları kırpar.
+
+    Args:
+        logo (Image.Image): Orijinal logo görüntüsü.
+        border_size (int): Etrafındaki beyazlık oranı. (0 ile 1 arasında bir değer olmalıdır.)
+        border_color (str): Kenarlık rengi.
+
+    Returns:
+        Image.Image: Kırpılmış logo görüntüsü.
+    """
+    # Alfa kanalını kullanarak kırpma yap
+    if logo.mode in ('RGBA', 'LA'):
+        alpha = logo.split()[-1]
+        bbox = alpha.getbbox()
+        if bbox:
+            logo = logo.crop(bbox)
+    else:
+        bg = Image.new(logo.mode, logo.size, logo.getpixel((0, 0)))
+        diff = ImageChops.difference(logo, bg)
+        bbox = diff.getbbox()
+        if bbox:
+            logo = logo.crop(bbox)
+    
+    if border_size > 0 and border_size < 1:
+        # Küçük bir kenarlık bırakmak için logoyu biraz büyüt
+        border_size = int(min(logo.size) * border_size)  # %5 oranında
+        logo = ImageOps.expand(logo, border=border_size, fill=border_color)
+
+    return logo
 
 def process_logo(logo_path: str) -> Image.Image:
     """
