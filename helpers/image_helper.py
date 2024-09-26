@@ -73,7 +73,7 @@ def resize_qr_image(qr_image: Image.Image, resolution: int) -> Image.Image:
     return qr_image.resize(new_size, Image.LANCZOS)
 
 
-def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True,
+def add_logo_to_qr(qr_image: Image.Image, logo_path: str, logo_size: float, is_circle: bool = True,
                     border_size: float = 0.0, border_color: str = "white") -> Image.Image:
     """
     QR kod görüntüsünün merkezine logo ekler. Logo daire veya kare olarak eklenebilir.
@@ -81,6 +81,7 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
     Args:
         qr_image (Image.Image): Orijinal QR kod görüntüsü.
         logo_path (str): Eklenecek logo dosyasının yolu.
+        logo_size (float): Logo boyutu (0-1 arasında bir oran).
         is_circle (bool): Logo daire mi olsun, kare mi. Varsayılan True (daire).
         border_size (float): Logo etrafındaki kenarlık boyutu.
         border_color (str): Logo etrafındaki kenarlık rengi.
@@ -95,9 +96,9 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
     # Logo etrafındaki beyazlıkları hafifçe kırp
     logo = trim_logo(logo)
 
-    # QR kodunun boyutunun %25'ini hesapla
+    # QR kodunun boyutunun %logo_size'ını hesapla
     qr_width, qr_height = qr_image.size
-    max_logo_size = min(qr_width, qr_height) // 4
+    max_logo_size = int(min(qr_width, qr_height) * logo_size)
 
     # Logo boyutunu oranları koruyarak yeniden boyutlandır
     logo.thumbnail((max_logo_size, max_logo_size), Image.LANCZOS)

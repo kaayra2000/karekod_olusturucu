@@ -1,6 +1,6 @@
 import argparse
 from helpers import create_whatsapp_qr
-
+from helpers.range_helper import float_range
 def main() -> None:
     """
     WhatsApp tarzı QR kod oluşturucu için komut satırı arayüzü.
@@ -20,6 +20,7 @@ def main() -> None:
     parser.add_argument("-mv", "--min_version", type=int, help="Minimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
     parser.add_argument("-xv", "--max_version", type=int, help="Maksimum QR kod versiyonu (1-40 arası)", default=20, choices=range(1, 41))
     parser.add_argument("-cl", "--center_logo", help="QR kodun merkezine yerleştirilecek logo dosyasının yolu", default=None)
+    parser.add_argument("-cls", "--center_logo_size", help="QR kodun merkezine yerleştirilecek logonun boyuta oranı (0-1 arası)", type=float_range, default=0.2)
     parser.add_argument("-ilc", "--is_logo_circle", action="store_true", help="Merkez logonun daire şeklinde olup olmayacağı", default=False)
     parser.add_argument("-bs", "--border_size", type=float, help="Merkez logonun kenarlık boyutu (en fazla 0.15 önerilir)", default=0.0)
     parser.add_argument("-bc", "--border_color", help="Merkez logonun kenarlık rengi", default="white")
@@ -34,7 +35,7 @@ def main() -> None:
 
     create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format,
                        args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version,
-                       args.center_logo, args.is_logo_circle, args.border_size, args.border_color)
+                       args.center_logo, args.center_logo_size, args.is_logo_circle, args.border_size, args.border_color)
 
 if __name__ == "__main__":
     main()
