@@ -74,7 +74,7 @@ def resize_qr_image(qr_image: Image.Image, resolution: int) -> Image.Image:
 
 
 def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True,
-                    border_size: int = 0, border_color: str = "white") -> Image.Image:
+                    border_size: float = 0.0, border_color: str = "white") -> Image.Image:
     """
     QR kod görüntüsünün merkezine logo ekler. Logo daire veya kare olarak eklenebilir.
 
@@ -82,7 +82,7 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
         qr_image (Image.Image): Orijinal QR kod görüntüsü.
         logo_path (str): Eklenecek logo dosyasının yolu.
         is_circle (bool): Logo daire mi olsun, kare mi. Varsayılan True (daire).
-        border_size (int): Logo etrafındaki kenarlık boyutu.
+        border_size (float): Logo etrafındaki kenarlık boyutu.
         border_color (str): Logo etrafındaki kenarlık rengi.
 
     Returns:
@@ -129,13 +129,13 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
 
 
 
-def trim_logo(logo: Image.Image, border_size: int = 0, border_color: str = "white") -> Image.Image:
+def trim_logo(logo: Image.Image, border_size: float = 0.0, border_color: str = "white") -> Image.Image:
     """
     Logo etrafındaki gereksiz boşlukları kırpar.
 
     Args:
         logo (Image.Image): Orijinal logo görüntüsü.
-        border_size (int): Etrafındaki beyazlık oranı. (0 ile 1 arasında bir değer olmalıdır.)
+        border_size (float): Etrafındaki beyazlık oranı. (0 ile 1 arasında bir değer olmalıdır.)
         border_color (str): Kenarlık rengi.
 
     Returns:

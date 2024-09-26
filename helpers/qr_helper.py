@@ -9,7 +9,7 @@ from typing import Tuple, List
 from .math_helper import calculate_text_height
 
 def create_qr_code(data: str, version: int, resolution: int, center_logo: str = None, 
-                   is_logo_circle: bool = True, border_size: int = 0, border_color: str = "white") -> Image.Image:
+                   is_logo_circle: bool = True, border_size: float = 0.0, border_color: str = "white") -> Image.Image:
     """
     Özelleştirilmiş bir QR kodu oluşturur.
 
@@ -19,7 +19,7 @@ def create_qr_code(data: str, version: int, resolution: int, center_logo: str = 
         resolution (int): Oluşturulacak QR kodunun çözünürlüğü.
         center_logo (str, optional): Merkeze eklenecek logo dosyasının yolu.
         is_logo_circle (bool): Merkez logonun daire şeklinde olup olmayacağı.
-        border_size (int): QR kodunun etrafındaki boş alanın genişliği.
+        border_size (float): QR kodunun etrafındaki boş alanın genişliği.
         border_color (str): QR kodunun kenarlık rengi.
 
     Returns:
@@ -75,7 +75,7 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int 
                        image_files: list = None, output_format: str = "png",
                        text_scale_factor: float = 1.0, logo_scale_factor: float = 1.0, 
                        min_version: int = 1, max_version: int = 20, center_logo: str = None,
-                       is_logo_circle: bool = True,  border_size: int = 0, border_color: str = "white") -> None:
+                       is_logo_circle: bool = True,  border_size: float = 0.0, border_color: str = "white") -> None:
     """
     WhatsApp QR kodu oluşturur ve kaydeder.
 
@@ -92,7 +92,7 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int 
         max_version (int): Maksimum QR kod versiyonu.
         center_logo (str): Merkeze yerleştirilecek logo dosyasının yolu.
         is_logo_circle (bool): Merkez logonun daire şeklinde olup olmayacağı.
-        border_size (int): QR kodunun etrafındaki boş alanın genişliği.
+        border_size (float): QR kodunun etrafındaki boş alanın genişliği.
         border_color (str): QR kodunun kenarlık rengi.
 
     Returns:
