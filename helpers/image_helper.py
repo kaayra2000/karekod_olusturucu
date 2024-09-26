@@ -93,7 +93,7 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
     logo = process_logo(logo_path)
 
     # Logo etrafındaki beyazlıkları hafifçe kırp
-    logo = trim_logo(logo, border_size, border_color)
+    logo = trim_logo(logo)
 
     # QR kodunun boyutunun %25'ini hesapla
     qr_width, qr_height = qr_image.size
@@ -103,9 +103,9 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
     logo.thumbnail((max_logo_size, max_logo_size), Image.LANCZOS)
 
     # Beyaz arka planlı yeni bir resim oluştur
-    border_size = int(logo.width * 0.10)  # Kenar boşluğu (%10 oranında)
+    border_size = int(logo.width * border_size)  # Kenar boşluğu (border_size oranında)
     new_size = (logo.width + 2 * border_size, logo.height + 2 * border_size)
-    background = Image.new('RGBA', new_size, 'white')
+    background = Image.new('RGBA', new_size, border_color)
 
     # Logoyu yeni arka planın ortasına yerleştir
     logo_position = (border_size, border_size)
@@ -129,14 +129,12 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, is_circle: bool = True
 
 
 
-def trim_logo(logo: Image.Image, border_size: float = 0.0, border_color: str = "white") -> Image.Image:
+def trim_logo(logo: Image.Image) -> Image.Image:
     """
     Logo etrafındaki gereksiz boşlukları kırpar.
 
     Args:
         logo (Image.Image): Orijinal logo görüntüsü.
-        border_size (float): Etrafındaki beyazlık oranı. (0 ile 1 arasında bir değer olmalıdır.)
-        border_color (str): Kenarlık rengi.
 
     Returns:
         Image.Image: Kırpılmış logo görüntüsü.
@@ -153,11 +151,6 @@ def trim_logo(logo: Image.Image, border_size: float = 0.0, border_color: str = "
         bbox = diff.getbbox()
         if bbox:
             logo = logo.crop(bbox)
-    
-    if border_size > 0 and border_size < 1:
-        # Küçük bir kenarlık bırakmak için logoyu biraz büyüt
-        border_size = int(min(logo.size) * border_size)  # %5 oranında
-        logo = ImageOps.expand(logo, border=border_size, fill=border_color)
 
     return logo
 

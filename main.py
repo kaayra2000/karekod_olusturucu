@@ -20,8 +20,8 @@ def main() -> None:
     parser.add_argument("-mv", "--min_version", type=int, help="Minimum QR kod versiyonu (1-40 arası)", default=1, choices=range(1, 41))
     parser.add_argument("-xv", "--max_version", type=int, help="Maksimum QR kod versiyonu (1-40 arası)", default=20, choices=range(1, 41))
     parser.add_argument("-cl", "--center_logo", help="QR kodun merkezine yerleştirilecek logo dosyasının yolu", default=None)
-    parser.add_argument("-ilc", "--is_logo_circle", action="store_true", help="Merkez logonun daire şeklinde olup olmayacağı")
-    parser.add_argument("-bs", "--border_size", type=float, help="Merkez logonun kenarlık boyutu", default=0)
+    parser.add_argument("-ilc", "--is_logo_circle", action="store_true", help="Merkez logonun daire şeklinde olup olmayacağı", default=False)
+    parser.add_argument("-bs", "--border_size", type=float, help="Merkez logonun kenarlık boyutu (en fazla 0.15 önerilir)", default=0.0)
     parser.add_argument("-bc", "--border_color", help="Merkez logonun kenarlık rengi", default="white")
 
     args = parser.parse_args()
