@@ -132,28 +132,44 @@ def add_logo_to_qr(qr_image: Image.Image, logo_path: str, logo_size: float, is_c
 
 def trim_logo(logo: Image.Image) -> Image.Image:
     """
-    Logo etrafındaki gereksiz boşlukları kırpar.
+    Logo etrafındaki gereksiz boşlukları kırpar ve kare şeklinde yapar.
 
     Args:
         logo (Image.Image): Orijinal logo görüntüsü.
 
     Returns:
-        Image.Image: Kırpılmış logo görüntüsü.
+        Image.Image: Kırpılmış ve kare şekline getirilmiş logo görüntüsü.
     """
     # Alfa kanalını kullanarak kırpma yap
     if logo.mode in ('RGBA', 'LA'):
         alpha = logo.split()[-1]
         bbox = alpha.getbbox()
-        if bbox:
-            logo = logo.crop(bbox)
     else:
         bg = Image.new(logo.mode, logo.size, logo.getpixel((0, 0)))
         diff = ImageChops.difference(logo, bg)
         bbox = diff.getbbox()
-        if bbox:
-            logo = logo.crop(bbox)
 
-    return logo
+    if bbox:
+        logo = logo.crop(bbox)
+
+    # Kare şeklinde kırpma yap
+    width, height = logo.size
+    size = max(width, height)
+    
+    # Orijinal logonun moduna göre yeni bir kare görüntü oluştur
+    if logo.mode == 'RGBA':
+        new_logo = Image.new('RGBA', (size, size), (255, 255, 255, 0))  # Şeffaf beyaz
+    else:
+        new_logo = Image.new(logo.mode, (size, size), (255, 255, 255))  # Opak beyaz
+    
+    # Logo'yu yeni kare görüntünün ortasına yerleştir
+    x = (size - width) // 2
+    y = (size - height) // 2
+    new_logo.paste(logo, (x, y), logo if logo.mode == 'RGBA' else None)
+
+    return new_logo
+
+
 
 def process_logo(logo_path: str) -> Image.Image:
     """
