@@ -72,7 +72,7 @@ def prepare_title_text(title: str, max_width: int, max_height: int, scale_factor
     title_height = calculate_text_height(wrapped_text, font)
     return font, wrapped_text, title_height
 
-def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int = 1080, 
+def create_whatsapp_qr(data: str, output_file: str, title: str, title_color: str = "black", resolution: int = 1080, 
                        image_files: list = None, output_format: str = "png",
                        text_scale_factor: float = 1.0, logo_scale_factor: float = 1.0, 
                        min_version: int = 1, max_version: int = 20, center_logo: str = None, center_logo_size: float = 0.2,
@@ -122,7 +122,7 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, resolution: int 
             background.paste(qr_img, (0, title_height + spacing + logo_max_size))
             
             # Başlığı çiz
-            draw_title(background, wrapped_text, font, logo_max_size, spacing)
+            draw_title(background, wrapped_text, font, logo_max_size, spacing, title_color)
             
             # QR kodunu kaydet
             save_qr_image(background, output_file, version, output_format)
