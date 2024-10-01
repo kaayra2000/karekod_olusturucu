@@ -10,10 +10,10 @@ def main() -> None:
     """
     parser = create_argument_parser() # argüman ayrıştırıcıyı oluştur
 
-    args = parser.parse_args() # 
+    args = parser.parse_args() # argümanları ayrıştır
 
-    if not is_arguments_valid(args, parser):
-        return 1
+    if not is_arguments_valid(args, parser): # argümanların geçerliliğini kontrol et
+        return 1 # geçersiz argümanlar varsa hata kodu döndür
 
     create_whatsapp_qr(args.data, args.output, args.title, args.title_color, args.resolution, args.images, args.format,
                        args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version,
