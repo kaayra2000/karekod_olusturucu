@@ -3,7 +3,7 @@ from PIL import Image, ImageFont, ImageDraw, ImageChops, ImageOps
 import cairosvg
 from typing import List, Tuple
 from .math_helper import calculate_dimensions
-import numpy as np
+import emoji
 def load_logos(image_files: list, logo_max_size: int) -> list:
     """
     Verilen dosya yollarından logo görüntülerini yükler ve boyutlandırır.
@@ -311,16 +311,18 @@ def paste_logo(background: Image.Image, logo: Image.Image, position: tuple) -> N
     """
     background.paste(logo, position, logo if logo.mode == 'RGBA' else None)
 
-def draw_title(background: Image.Image, wrapped_text: List[str], font: ImageFont.ImageFont, logo_max_size: int, spacing: int) -> None:
+def draw_title(background: Image.Image, wrapped_text: List[str], font: ImageFont.ImageFont,
+               logo_max_size: int, spacing: int, title_color: str = "black") -> None:
     """
-    Arka plan görüntüsüne başlık metnini çizer.
+    Arka plan görüntüsüne başlık metnini çizer (emoji desteği ile).
 
     Args:
         background (Image.Image): Metnin çizileceği arka plan görüntüsü.
         wrapped_text (List[str]): Çizilecek metin satırlarının listesi.
-        font (ImageFont.ImageFont): Kullanılacak font.
+        font (ImageFont.ImageFont): Kullanılacak font (emoji desteği olan).
         logo_max_size (int): Logoların maksimum boyutu (metin konumlandırması için kullanılır).
         spacing (int): Metin ile logolar arasındaki boşluk miktarı.
+        title_color (str): Metin rengi.
 
     Returns:
         None: Fonksiyon bir değer döndürmez, ancak arka plan görüntüsünü değiştirir.
@@ -330,9 +332,11 @@ def draw_title(background: Image.Image, wrapped_text: List[str], font: ImageFont
     start_y = calculate_start_y(logo_max_size, spacing)
     
     for line in wrapped_text:
-        line_width, line_height = calculate_line_dimensions(font, line)
+        # Emoji kısayollarını gerçek emoji karakterlerine dönüştür
+        line_with_emoji = emoji.emojize(line, language='alias')
+        line_width, line_height = calculate_line_dimensions(font, line_with_emoji)
         x_position = calculate_x_position(bg_width, line_width)
-        draw_text_line(draw, line, font, x_position, start_y)
+        draw_text_line(draw, line_with_emoji, font, x_position, start_y, title_color)
         start_y += line_height
 
 def create_draw_object(image: Image.Image) -> ImageDraw.ImageDraw:
@@ -387,7 +391,7 @@ def calculate_x_position(bg_width: int, line_width: int) -> int:
     """
     return (bg_width - line_width) // 2
 
-def draw_text_line(draw: ImageDraw.ImageDraw, line: str, font: ImageFont.ImageFont, x: int, y: int) -> None:
+def draw_text_line(draw: ImageDraw.ImageDraw, line: str, font: ImageFont.ImageFont, x: int, y: int, fill:str = "black") -> None:
     """
     Belirtilen konuma bir metin satırı çizer.
 
@@ -397,8 +401,9 @@ def draw_text_line(draw: ImageDraw.ImageDraw, line: str, font: ImageFont.ImageFo
         font (ImageFont.ImageFont): Kullanılacak font.
         x (int): Metnin x koordinatı.
         y (int): Metnin y koordinatı.
+        fill (str): Metin rengi.
 
     Returns:
         None: Fonksiyon bir değer döndürmez, ancak çizim nesnesini günceller.
     """
-    draw.text((x, y), line, font=font, fill="black")
+    draw.text((x, y), line, font=font, fill=fill)

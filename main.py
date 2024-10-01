@@ -12,6 +12,7 @@ def main() -> None:
     parser.add_argument("data", help="QR kodunda yer alacak veri")
     parser.add_argument("-o", "--output", help="Çıktı dosyasının adı (örn: qrcode.png)", default="karekod.png")
     parser.add_argument("-t", "--title", help="QR kodun üstüne eklenecek başlık", default="WhatsApp QR Kodu")
+    parser.add_argument("-tc", "--title_color", type=str, help="Başlık rengi", default="black")
     parser.add_argument("-i", "--images", nargs='+', help="Eklenecek resim dosyalarının yolları", default=None)
     parser.add_argument("-r", "--resolution", type=int, help="QR kodun çözünürlüğü (piksel cinsinden genişlik)", default=1080)
     parser.add_argument("-f", "--format", help="Çıktı dosyası formatı (png, jpg, bmp, vb.)", default="png")
@@ -33,7 +34,7 @@ def main() -> None:
     if args.border_size < 0:
         parser.error("Kenarlık boyutu negatif olamaz.")
 
-    create_whatsapp_qr(args.data, args.output, args.title, args.resolution, args.images, args.format,
+    create_whatsapp_qr(args.data, args.output, args.title, args.title_color, args.resolution, args.images, args.format,
                        args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version,
                        args.center_logo, args.center_logo_size, args.is_logo_circle, args.border_size, args.border_color)
 
