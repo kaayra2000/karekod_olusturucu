@@ -2,3 +2,4 @@ CairoSVG==2.7.1
 pillow==10.3.0
 qrcode[pil]
 numpy==2.1.1
+emoji==2.13.2
