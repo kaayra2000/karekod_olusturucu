@@ -1,6 +1,14 @@
 import argparse
 from .range_helper import float_range
 
+class AlphabeticalOrderHelpFormatter(argparse.HelpFormatter):
+    """
+    Argümanları alfabetik sıraya göre sıralayan yardımcı sınıf.
+    """
+    def add_arguments(self, actions):
+        actions = sorted(actions, key=lambda action: action.dest)
+        super(AlphabeticalOrderHelpFormatter, self).add_arguments(actions)
+
 def create_basic_parser() -> argparse.ArgumentParser:
     """
     Temel argüman ayrıştırıcıyı oluşturur.
@@ -8,7 +16,7 @@ def create_basic_parser() -> argparse.ArgumentParser:
     Returns:
         argparse.ArgumentParser: Temel argümanları içeren ayrıştırıcı
     """
-    parser = argparse.ArgumentParser(description="WhatsApp tarzı QR kod oluşturucu")
+    parser = argparse.ArgumentParser(description="WhatsApp tarzı QR kod oluşturucu", formatter_class=AlphabeticalOrderHelpFormatter)
     parser.add_argument("data", help="QR kodunda yer alacak veri")
     parser.add_argument("-o", "--output", help="Çıktı dosyasının adı (örn: qrcode.png)", default="karekod.png")
     return parser
