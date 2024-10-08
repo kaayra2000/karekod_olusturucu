@@ -1,13 +1,14 @@
 import qrcode
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
+from qrcode.image.styles.colormasks import SolidFillColorMask
 from PIL import Image, ImageFont
 from .text_helper import wrap_text
 from .image_helper import load_logos, load_font, add_logo_to_qr, resize_qr_image, create_background, paste_logos, draw_title
 from .filesystem_helper import save_qr_image
 from typing import Tuple, List
 from .math_helper import calculate_text_height
-
+from .color_helper import get_rgb_from_color_name
 def create_qr_code(data: str, version: int, foreground_color: str, background_color: str,
                    resolution: int, center_logo: str = None, center_logo_size: float = 0.2, 
                    is_logo_circle: bool = True, border_size: float = 0.0, border_color: str = "white") -> Image.Image:
@@ -51,12 +52,25 @@ def generate_qr_image(data: str, version: int, background_color: str = "white", 
     qr = qrcode.QRCode(version=version, box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
+    
+    # Renk isimlerini hex kodlarına dönüştür
+    background_color_rgb = get_rgb_from_color_name(background_color)
+    foreground_color_rgb = get_rgb_from_color_name(foreground_color)
+    
+    # Renkleri ayarlamak için SolidFillColorMask kullanın
+    color_mask = SolidFillColorMask(
+        back_color=foreground_color_rgb,   # Modüllerin rengi
+        front_color=background_color_rgb   # Arka planın rengi
+    )
+    
+    # QR kod görüntüsünü oluştur
+    img = qr.make_image(
+        image_factory=StyledPilImage,
+        module_drawer=RoundedModuleDrawer(),
+        color_mask=color_mask
+    )
+    return img
 
-    # Yuvarlak köşeli modül çizici ile QR kod görüntüsünü oluştur
-    return qr.make_image(back_color=background_color, 
-                         fill_color=foreground_color,
-                         image_factory=StyledPilImage, 
-                         module_drawer=RoundedModuleDrawer())
 
 
 def prepare_title_text(title: str, max_width: int, max_height: int, scale_factor: float) -> Tuple[ImageFont.ImageFont, List[str], int]:

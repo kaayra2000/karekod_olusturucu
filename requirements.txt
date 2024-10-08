@@ -3,3 +3,4 @@ pillow==10.3.0
 qrcode[pil]==8.0.0
 numpy==2.1.1
 emoji==2.13.2
+webcolors==24.8.0
