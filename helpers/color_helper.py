@@ -42,6 +42,9 @@ def get_rgb_from_color_name(color_name: str) -> tuple:
     """
     # Renk ismini hex koduna dönüştür
     hex_code = color_name_to_hex(color_name)
+    if hex_code is None:
+        raise ValueError(f"Geçersiz renk ismi verildi. Hatayı düzeltin. Hatalı renk ismi: {color_name}")
     # Hex kodunu RGB tupılına dönüştür
     rgb_tuple = hex_to_rgb(hex_code)
     return rgb_tuple
+
