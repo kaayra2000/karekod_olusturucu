@@ -8,7 +8,8 @@ from .filesystem_helper import save_qr_image
 from typing import Tuple, List
 from .math_helper import calculate_text_height
 
-def create_qr_code(data: str, version: int, resolution: int, center_logo: str = None, center_logo_size: float = 0.2, 
+def create_qr_code(data: str, version: int, foreground_color: str, background_color: str,
+                   resolution: int, center_logo: str = None, center_logo_size: float = 0.2, 
                    is_logo_circle: bool = True, border_size: float = 0.0, border_color: str = "white") -> Image.Image:
     """
     Özelleştirilmiş bir QR kodu oluşturur.
@@ -26,20 +27,22 @@ def create_qr_code(data: str, version: int, resolution: int, center_logo: str = 
     Returns:
         Image.Image: Oluşturulan QR kod görüntüsü.
     """
-    qr_image = generate_qr_image(data, version)
+    qr_image = generate_qr_image(data, version, foreground_color, background_color)
     
     if center_logo:
         qr_image = add_logo_to_qr(qr_image, center_logo, center_logo_size, is_logo_circle, border_size, border_color)
     
     return resize_qr_image(qr_image, resolution)
 
-def generate_qr_image(data: str, version: int) -> Image.Image:
+def generate_qr_image(data: str, version: int, background_color: str = "white", foreground_color: str = "black") -> Image.Image:
     """
-    Verilen data ve sürüm bilgisine göre QR kod görüntüsü oluşturur.
+    Verilen data, sürüm bilgisi ve renk seçeneklerine göre QR kod görüntüsü oluşturur.
 
     Args:
         data (str): QR kodunda kodlanacak veri.
         version (int): QR kodunun sürümü.
+        background_color (str): QR kodunun arka plan rengi. Varsayılan değer "white".
+        foreground_color (str): QR kodunun ön plan (modül) rengi. Varsayılan değer "black".
 
     Returns:
         Image.Image: Oluşturulan temel QR kod görüntüsü.
@@ -50,9 +53,11 @@ def generate_qr_image(data: str, version: int) -> Image.Image:
     qr.make(fit=True)
 
     # Yuvarlak köşeli modül çizici ile QR kod görüntüsünü oluştur
-    return qr.make_image(back_color="white", 
+    return qr.make_image(back_color=background_color, 
+                         fill_color=foreground_color,
                          image_factory=StyledPilImage, 
                          module_drawer=RoundedModuleDrawer())
+
 
 def prepare_title_text(title: str, max_width: int, max_height: int, scale_factor: float) -> Tuple[ImageFont.ImageFont, List[str], int]:
     """
@@ -72,7 +77,8 @@ def prepare_title_text(title: str, max_width: int, max_height: int, scale_factor
     title_height = calculate_text_height(wrapped_text, font)
     return font, wrapped_text, title_height
 
-def create_whatsapp_qr(data: str, output_file: str, title: str, title_color: str = "black", resolution: int = 1080, 
+def create_whatsapp_qr(data: str, output_file: str, title: str, foreground_color: str = "black", background_color: str = "white",
+                       title_color: str = "black", resolution: int = 1080, 
                        image_files: list = None, output_format: str = "png",
                        text_scale_factor: float = 1.0, logo_scale_factor: float = 1.0, 
                        min_version: int = 1, max_version: int = 20, center_logo: str = None, center_logo_size: float = 0.2,
@@ -103,7 +109,8 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, title_color: str
     try:
         for version in range(min_version, max_version + 1):
             # QR kodunu oluştur
-            qr_img = create_qr_code(data, version, resolution, center_logo, center_logo_size, is_logo_circle, border_size, border_color)
+            qr_img = create_qr_code(data, version, foreground_color, background_color, resolution,
+                                    center_logo, center_logo_size, is_logo_circle, border_size, border_color)
             
             # Logoları yükle
             logos = load_logos(image_files, int(50 * logo_scale_factor))

@@ -15,9 +15,10 @@ def main() -> None:
     if not is_arguments_valid(args, parser): # argümanların geçerliliğini kontrol et
         return 1 # geçersiz argümanlar varsa hata kodu döndür
 
-    create_whatsapp_qr(args.data, args.output, args.title, args.title_color, args.resolution, args.images, args.format,
-                       args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version,
-                       args.center_logo, args.center_logo_size, args.is_logo_circle, args.border_size, args.border_color)
+    create_whatsapp_qr(args.data, args.output, args.title, args.foreground_color, args.background_color,
+                    args.title_color, args.resolution, args.images, args.format,
+                    args.text_scale_factor, args.logo_scale_factor, args.min_version, args.max_version,
+                    args.center_logo, args.center_logo_size, args.is_logo_circle, args.border_size, args.border_color)
 
 if __name__ == "__main__":
     main()

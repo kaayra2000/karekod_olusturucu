@@ -27,6 +27,9 @@ def add_appearance_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-tc", "--title_color", type=str, help="Başlık rengi", default="black")
     parser.add_argument("-r", "--resolution", type=int, help="QR kodun çözünürlüğü (piksel cinsinden genişlik)", default=1080)
     parser.add_argument("-f", "--format", help="Çıktı dosyası formatı (png, jpg, bmp, vb.)", default="png")
+    parser.add_argument("-fgc", "--foreground_color", type=str, help="QR kodun ön plan rengi", default="black")
+    parser.add_argument("-bgc", "--background_color", type=str, help="QR kodun arka plan rengi", default="white")
+
 
 def add_image_arguments(parser: argparse.ArgumentParser) -> None:
     """

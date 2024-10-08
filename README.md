@@ -72,7 +72,9 @@ Parametreler:
 - **-xv, --max_version:** Oluşturulacak versiyon numaralarının en büyüğü. _(varsayılan 1, minimumdan küçük olamaz)_
 - **-ilc, --is_logo_circle** Merkezdeki logonun dairesel mi yoksa kare mi olacağını belirler.
 - **-bs, --border_size** Merkezdeki logonun etrafındaki boş alanın (quiet zone) genişliğini ayarlar. _(en fazla 0.15 önerilir)_
-- **-bc, --border_color** Merkezdeki logonun kenarlık rengini belirler.
+- **-bc, --border_color** Merkezdeki logonun kenarlık rengini belirler. _(varsayılan beyaz)_
+- **-fgc, --foreground_color:** QR kodun ön plan rengi _(varsayılan: "black")_
+- **-bgc, --background_color:** QR kodun arka plan rengi _(varsayılan: "white")_
 
 ## Örnek Kullanım:
 
