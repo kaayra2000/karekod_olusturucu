@@ -130,7 +130,7 @@ def create_whatsapp_qr(data: str, output_file: str, title: str, foreground_color
             logos = load_logos(image_files, int(50 * logo_scale_factor))
             
             # Arka planı oluştur
-            background, wrapped_text, title_height, logo_max_size, spacing, font = create_background(qr_img, title, text_scale_factor, prepare_title_text)
+            background, wrapped_text, title_height, logo_max_size, spacing, font = create_background(qr_img, title, background_color, text_scale_factor, prepare_title_text)
             
             if not wrapped_text:
                 raise ValueError("Başlık metni çok küçük, okunamaz durumda.")

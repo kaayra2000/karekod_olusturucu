@@ -186,11 +186,12 @@ def process_logo(logo_path: str) -> Image.Image:
     else:
         return Image.open(logo_path)
 
-def create_white_background(width: int, height: int, title_height: int, spacing: int, logo_max_size: int) -> Image.Image:
+def create_empty_background(background_color: str, width: int, height: int, title_height: int, spacing: int, logo_max_size: int) -> Image.Image:
     """
     Beyaz bir arka plan oluşturur.
 
     Args:
+        background_color (str): Arka plan rengi.
         width (int): Arka plan genişliği.
         height (int): QR kod yüksekliği.
         title_height (int): Başlık yüksekliği.
@@ -201,16 +202,17 @@ def create_white_background(width: int, height: int, title_height: int, spacing:
         Image.Image: Oluşturulan beyaz arka plan.
     """
     total_height = height + title_height + spacing + logo_max_size
-    return Image.new('RGB', (width, total_height), color='white')
+    return Image.new('RGB', (width, total_height), color=background_color)
 
 
-def create_background(qr_img: Image.Image, title: str, scale_factor: float, prepare_title_text: callable) -> Tuple[Image.Image, List[str], int, int, int, ImageFont.ImageFont]:
+def create_background(qr_img: Image.Image, title: str, background_color: str, scale_factor: float, prepare_title_text: callable) -> Tuple[Image.Image, List[str], int, int, int, ImageFont.ImageFont]:
     """
     QR kodu ve başlık için arka plan oluşturur.
 
     Args:
         qr_img (Image.Image): QR kod görüntüsü.
         title (str): Eklenecek başlık metni.
+        background_color (str): Arka plan rengi.
         scale_factor (float): Ölçeklendirme faktörü.
         prepare_title_text (callable): Başlık metnini hazırlayan fonksiyon.
 
@@ -229,7 +231,7 @@ def create_background(qr_img: Image.Image, title: str, scale_factor: float, prep
     font, wrapped_text, title_height = prepare_title_text(title, max_title_width, max_title_height, scale_factor)
 
     # Beyaz arka planı oluştur
-    background = create_white_background(img_w, img_h, title_height, spacing, logo_max_size)
+    background = create_empty_background(background_color, img_w, img_h, title_height, spacing, logo_max_size)
 
     # Sonuçları döndür
     return background, wrapped_text, title_height, logo_max_size, spacing, font
